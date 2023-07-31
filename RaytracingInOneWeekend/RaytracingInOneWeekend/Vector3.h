@@ -64,56 +64,56 @@ using Colour = Vector3;    // RGB color
 
 // Vector3 Utility Functions
 
-std::ostream& operator<<(std::ostream& out, const Vector3& vector)
+inline std::ostream& operator<<(std::ostream& out, const Vector3& vector)
 {
     return out << vector.X() << ' ' << vector.Y() << ' ' << vector.Z();
 }
 
-Vector3 operator+(const Vector3& firstVector, const Vector3& secondVector)
+inline Vector3 operator+(const Vector3& firstVector, const Vector3& secondVector)
 {
     return Vector3(firstVector.X() + secondVector.X(), firstVector.Y() + secondVector.Y(), firstVector.Z() + secondVector.Z());
 }
 
-Vector3 operator-(const Vector3& firstVector, const Vector3& secondVector)
+inline Vector3 operator-(const Vector3& firstVector, const Vector3& secondVector)
 {
     return Vector3(firstVector.X() - secondVector.X(), firstVector.Y() - secondVector.Y(), firstVector.Z() - secondVector.Z());
 }
 
-Vector3 operator*(const Vector3& firstVector, const Vector3& secondVector) 
+inline Vector3 operator*(const Vector3& firstVector, const Vector3& secondVector)
 {
     return Vector3(firstVector.X() * secondVector.X(), firstVector.Y() * secondVector.Y(), firstVector.Z() * secondVector.Z());
 }
 
-Vector3 operator*(double scalar, const Vector3& vector)
+inline Vector3 operator*(double scalar, const Vector3& vector)
 {
     return Vector3(scalar * vector.X(), scalar * vector.Y(), scalar * vector.Z());
 }
 
-Vector3 operator*(const Vector3& vector, double scalar)
+inline Vector3 operator*(const Vector3& vector, double scalar)
 {
     return scalar * vector;
 }
 
-Vector3 operator/(Vector3 vector, double scalar) 
+inline Vector3 operator/(Vector3 vector, double scalar)
 {
     return (1 / scalar) * vector;
 }
 
-double Dot(const Vector3& firstVector, const Vector3& secondVector)
+inline double Dot(const Vector3& firstVector, const Vector3& secondVector)
 {
     return firstVector.X() * secondVector.X()
         + firstVector.Y() * secondVector.Y()
         + firstVector.Z() * secondVector.Z();
 }
 
-Vector3 Cross(const Vector3& firstVector, const Vector3& secondVector)
+inline Vector3 Cross(const Vector3& firstVector, const Vector3& secondVector)
 {
     return Vector3(firstVector.Y() * secondVector.Z() - firstVector.Z() * secondVector.Y(),
         firstVector.Z() * secondVector.X() - firstVector.X() * secondVector.Z(),
         firstVector.X() * secondVector.Y() - firstVector.Y() * secondVector.X());
 }
 
-Vector3 GetUnitVector(const Vector3& vector) 
+inline Vector3 GetUnitVector(const Vector3& vector)
 {
     return vector / vector.Length();
 }

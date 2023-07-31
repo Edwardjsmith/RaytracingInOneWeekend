@@ -1,25 +1,18 @@
 #pragma once
 
+#include "Constants.h"
+
 #include "Colour.h"
-#include "Ray.h"
+#include "HittablesList.h"
+#include "Sphere.h"
 
-const bool IntersectsSphere(const Point3& sphereCentre, double sphereRadius, const Ray& rayToCheck)
+Colour RayColour(const Ray& ray, const HittableEntity& entity)
 {
-	const Vector3 diff = rayToCheck.GetOrigin() - sphereCentre;
-	const double a = Dot(rayToCheck.GetDirection(), rayToCheck.GetDirection());
-	const double b = 2.0 * Dot(diff, rayToCheck.GetDirection());
-	const double c = Dot(diff, diff) - (sphereRadius * sphereRadius);
+	HitData data;
 
-	const double discriminant = (b * b) - (4 * a * c);
-
-	return discriminant > 0.0;
-}
-
-Colour RayColour(const Ray& ray)
-{
-	if (IntersectsSphere(Point3(0, 0, -1), 0.5, ray))
+	if (entity.IsHit(ray, 0.0, infinity, data))
 	{
-		return Colour(1, 0, 0);
+		return 0.5 * (data.hitNormal + Colour(1.0));
 	}
 
 	Vector3 unitDir = GetUnitVector(ray.GetDirection());
@@ -44,8 +37,14 @@ const Vector3 cameraRight = Vector3(cameraViewportWidth, 0.0, 0.0);
 const Vector3 cameraUp = Vector3(0, cameraViewportHeight, 0.0);
 const Vector3 cameraLowerLeftCorner = cameraOrigin - (cameraRight * 0.5) - (cameraUp * 0.5) - Vector3(0, 0, cameraFocalLength);
 
+//Hittable entities
+HittablesList entities;
+
 int main()
 {
+	entities.Add(make_shared<Sphere>(Point3(0, -100.5, -1), 100));
+	entities.Add(make_shared<Sphere>(Point3(0, 0, -1), 0.5));
+
 	//Render image
 	std::cout << "P3\n" << imageWidth << ' ' << imageHeight << "\n255\n";
 
@@ -61,7 +60,7 @@ int main()
 			const Vector3 rayDir = cameraLowerLeftCorner + (x * cameraRight) + (y * cameraUp) - cameraOrigin;
 			const Ray ray(cameraOrigin, rayDir);
 
-			Colour pixelColour = RayColour(ray);
+			Colour pixelColour = RayColour(ray, entities);
 			WriteColour(std::cout, pixelColour);
 		}
 	}
