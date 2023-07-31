@@ -1,3 +1,5 @@
+#pragma once
+
 #ifndef COLOR_H
 #define COLOUR_H
 

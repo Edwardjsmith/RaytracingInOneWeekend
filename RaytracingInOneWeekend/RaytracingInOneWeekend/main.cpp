@@ -1,12 +1,34 @@
+#pragma once
+
 #include "Colour.h"
-#include "Vector3.h"
+#include "Ray.h"
+
+Colour RayColour(const Ray& ray)
+{
+	Vector3 unitDir = GetUnitVector(ray.GetDirection());
+
+	const double t = 0.5 * (unitDir.Y() + 1.0);
+
+	return (1.0 - t) * Colour(1.0) + (t * Colour(0.5, 0.7, 1.0));
+}
+
+//Image constants
+const double imageAspectRatio = 16.0 / 9.0;
+const int imageWidth = 400;
+const int imageHeight = static_cast<int>(imageWidth / imageAspectRatio);
+
+//Camera constants
+const double cameraViewportHeight = 2.0;
+const double cameraViewportWidth = imageAspectRatio * cameraViewportHeight;
+const double cameraFocalLength = 1.0;
+
+const Point3 cameraOrigin = Point3(0.0);
+const Vector3 cameraRight = Vector3(cameraViewportWidth, 0.0, 0.0);
+const Vector3 cameraUp = Vector3(0, cameraViewportHeight, 0.0);
+const Vector3 cameraLowerLeftCorner = cameraOrigin - (cameraRight * 0.5) - (cameraUp * 0.5) - Vector3(0, 0, cameraFocalLength);
 
 int main()
 {
-	//Image constants 
-	const int imageWidth = 256;
-	const int imageHeight = 256;
-
 	//Render image
 	std::cout << "P3\n" << imageWidth << ' ' << imageHeight << "\n255\n";
 
@@ -16,7 +38,13 @@ int main()
 
 		for (int i = 0; i < imageWidth; ++i)
 		{
-			const Colour pixelColour(static_cast<double>(i) / (imageWidth - 1), static_cast<double>(j) / (imageHeight - 1), 0.25);
+			const double x = static_cast<double>(i) / (imageWidth - 1);
+			const double y = static_cast<double>(j) / (imageHeight - 1);
+
+			const Vector3 rayDir = cameraLowerLeftCorner + (x * cameraRight) + (y * cameraUp) - cameraOrigin;
+			const Ray ray(cameraOrigin, rayDir);
+
+			Colour pixelColour = RayColour(ray);
 			WriteColour(std::cout, pixelColour);
 		}
 	}

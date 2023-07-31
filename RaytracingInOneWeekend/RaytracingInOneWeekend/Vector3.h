@@ -1,3 +1,5 @@
+#pragma once
+
 #ifndef VEC3_H
 #define VEC3_H
 
@@ -10,6 +12,7 @@ class Vector3 {
 public:
     Vector3() : element{ 0,0,0 } {}
     Vector3(double x, double y, double z) : element{ x, y, z } {}
+    Vector3(double value) : element{value, value, value } {}
 
     double X() const { return element[0]; }
     double Y() const { return element[1]; }
@@ -110,7 +113,7 @@ Vector3 Cross(const Vector3& firstVector, const Vector3& secondVector)
         firstVector.X() * secondVector.Y() - firstVector.Y() * secondVector.X());
 }
 
-Vector3 UnitVector(const Vector3& vector) 
+Vector3 GetUnitVector(const Vector3& vector) 
 {
     return vector / vector.Length();
 }
