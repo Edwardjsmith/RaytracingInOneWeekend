@@ -3,8 +3,25 @@
 #include "Colour.h"
 #include "Ray.h"
 
+const bool IntersectsSphere(const Point3& sphereCentre, double sphereRadius, const Ray& rayToCheck)
+{
+	const Vector3 diff = rayToCheck.GetOrigin() - sphereCentre;
+	const double a = Dot(rayToCheck.GetDirection(), rayToCheck.GetDirection());
+	const double b = 2.0 * Dot(diff, rayToCheck.GetDirection());
+	const double c = Dot(diff, diff) - (sphereRadius * sphereRadius);
+
+	const double discriminant = (b * b) - (4 * a * c);
+
+	return discriminant > 0.0;
+}
+
 Colour RayColour(const Ray& ray)
 {
+	if (IntersectsSphere(Point3(0, 0, -1), 0.5, ray))
+	{
+		return Colour(1, 0, 0);
+	}
+
 	Vector3 unitDir = GetUnitVector(ray.GetDirection());
 
 	const double t = 0.5 * (unitDir.Y() + 1.0);
