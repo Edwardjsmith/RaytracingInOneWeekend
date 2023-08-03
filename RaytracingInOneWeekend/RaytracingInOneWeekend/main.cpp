@@ -2,9 +2,10 @@
 
 #include "Constants.h"
 
-#include "Colour.h"
+#include "Camera.h"
 #include "HittablesList.h"
 #include "Sphere.h"
+#include "Colour.h"
 
 Colour RayColour(const Ray& ray, const HittableEntity& entity)
 {
@@ -23,19 +24,12 @@ Colour RayColour(const Ray& ray, const HittableEntity& entity)
 }
 
 //Image constants
-const double imageAspectRatio = 16.0 / 9.0;
 const int imageWidth = 400;
 const int imageHeight = static_cast<int>(imageWidth / imageAspectRatio);
+const int samplesPerPixel = 100;
 
-//Camera constants
-const double cameraViewportHeight = 2.0;
-const double cameraViewportWidth = imageAspectRatio * cameraViewportHeight;
-const double cameraFocalLength = 1.0;
-
-const Point3 cameraOrigin = Point3(0.0);
-const Vector3 cameraRight = Vector3(cameraViewportWidth, 0.0, 0.0);
-const Vector3 cameraUp = Vector3(0, cameraViewportHeight, 0.0);
-const Vector3 cameraLowerLeftCorner = cameraOrigin - (cameraRight * 0.5) - (cameraUp * 0.5) - Vector3(0, 0, cameraFocalLength);
+//Camera
+Camera cam;
 
 //Hittable entities
 HittablesList entities;
@@ -54,14 +48,16 @@ int main()
 
 		for (int i = 0; i < imageWidth; ++i)
 		{
-			const double x = static_cast<double>(i) / (imageWidth - 1);
-			const double y = static_cast<double>(j) / (imageHeight - 1);
+			Colour pixelColour(0);
+			for (int s = 0; s < samplesPerPixel; ++s)
+			{
+				const double u = (i + RandomDouble()) / (imageWidth - 1);
+				const double v = (j + RandomDouble()) / (imageHeight - 1);
+				const Ray ray = cam.GetRay(u, v);
+				pixelColour += RayColour(ray, entities);
+			}
 
-			const Vector3 rayDir = cameraLowerLeftCorner + (x * cameraRight) + (y * cameraUp) - cameraOrigin;
-			const Ray ray(cameraOrigin, rayDir);
-
-			Colour pixelColour = RayColour(ray, entities);
-			WriteColour(std::cout, pixelColour);
+			WriteColour(std::cout, pixelColour, samplesPerPixel);
 		}
 	}
 

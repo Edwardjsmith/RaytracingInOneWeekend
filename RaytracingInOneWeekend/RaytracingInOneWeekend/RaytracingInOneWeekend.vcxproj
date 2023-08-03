@@ -131,6 +131,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="HittablesList.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Sphere.cpp" />
@@ -139,6 +140,7 @@
     <None Include="image.ppm" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="Colour.h" />
     <ClInclude Include="Constants.h" />
     <ClInclude Include="HittableEntity.h" />
