@@ -13,13 +13,9 @@ void WriteColour(std::ostream& out, Colour pixelColour, const int samplesPerPixe
 {
     const double scale = 1.0 / samplesPerPixel;
 
-    const double r = pixelColour.X() * scale;
-    const double g = pixelColour.Y() * scale;
-    const double b = pixelColour.Z() * scale;
-
-
-
-    
+    const double r = sqrt(pixelColour.X() * scale);
+    const double g = sqrt(pixelColour.Y() * scale);
+    const double b = sqrt(pixelColour.Z() * scale);
 
     // Write the translated [0,255] value of each color component.
     out << static_cast<int>(rgbMultiplier * Clamp(r, 0.0, 0.999)) << ' '

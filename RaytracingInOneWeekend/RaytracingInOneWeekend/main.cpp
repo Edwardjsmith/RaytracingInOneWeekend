@@ -7,13 +7,21 @@
 #include "Sphere.h"
 #include "Colour.h"
 
-Colour RayColour(const Ray& ray, const HittableEntity& entity)
+Colour RayColour(const Ray& ray, const HittableEntity& entity, const int depth)
 {
+	//Exceeded depth limit, return
+	if (depth <= 0)
+	{
+		return Colour(0);
+	}
+
 	HitData data;
 
-	if (entity.IsHit(ray, 0.0, infinity, data))
+	if (entity.IsHit(ray, 0.001, infinity, data))
 	{
-		return 0.5 * (data.hitNormal + Colour(1.0));
+		const Point3 target = data.hitPoint + RandomInHemisphere(data.hitNormal);
+
+		return 0.5 * RayColour(Ray(data.hitPoint, target - data.hitPoint), entity, depth - 1);
 	}
 
 	Vector3 unitDir = GetUnitVector(ray.GetDirection());
@@ -33,6 +41,9 @@ Camera cam;
 
 //Hittable entities
 HittablesList entities;
+
+//Max depth
+const int maxDepth = 50;
 
 int main()
 {
@@ -54,7 +65,7 @@ int main()
 				const double u = (i + RandomDouble()) / (imageWidth - 1);
 				const double v = (j + RandomDouble()) / (imageHeight - 1);
 				const Ray ray = cam.GetRay(u, v);
-				pixelColour += RayColour(ray, entities);
+				pixelColour += RayColour(ray, entities, maxDepth);
 			}
 
 			WriteColour(std::cout, pixelColour, samplesPerPixel);

@@ -6,6 +6,8 @@
 #include <memory>
 #include <cstdlib>
 
+#include "Vector3.h"
+
 using std::shared_ptr;
 using std::make_shared;
 using std::sqrt;
@@ -46,6 +48,50 @@ inline double Clamp(double x, double min, double max)
     }
 
     return x;
+}
+
+inline static Vector3 RandomVector()
+{
+    return Vector3(RandomDouble(), RandomDouble(), RandomDouble());
+}
+
+inline static Vector3 RandomVectorInRange(double min, double max)
+{
+    return Vector3(RandomDoubleInRange(min, max), RandomDoubleInRange(min, max), RandomDoubleInRange(min, max));
+}
+
+inline static Vector3 RandomVectorInUnitSphere()
+{
+    while (true)
+    {
+        const Vector3 randomVec = RandomVectorInRange(-1, 1);
+
+        if (randomVec.LengthSquared() >= 1)
+        {
+            continue;
+        }
+
+        return randomVec;
+    }
+}
+
+inline static Vector3 RandomUnitVectorInUnitSphere()
+{
+    return GetUnitVector(RandomVectorInUnitSphere());
+}
+
+inline static Vector3 RandomInHemisphere(const Vector3& normal)
+{
+    const Vector3 randomInSphere = RandomVectorInUnitSphere();
+
+    if (Dot(randomInSphere, normal) > 0.0)
+    {
+        return randomInSphere;
+    }
+    else
+    {
+        return -randomInSphere;
+    }
 }
 
 // Common Headers
