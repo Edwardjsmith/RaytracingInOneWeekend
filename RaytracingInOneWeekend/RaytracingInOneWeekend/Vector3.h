@@ -8,7 +8,8 @@
 
 using std::sqrt;
 
-class Vector3 {
+class Vector3
+{
 public:
     Vector3() : element{ 0,0,0 } {}
     Vector3(double x, double y, double z) : element{ x, y, z } {}
@@ -51,6 +52,12 @@ public:
     double LengthSquared() const
     {
         return element[0] * element[0] + element[1] * element[1] + element[2] * element[2];
+    }
+
+    bool NearZero() const
+    {
+        const double s = 1e-8;
+        return(fabs(element[0]) < s && fabs(element[1]) < s && fabs(element[2]) < s);
     }
 
 private:

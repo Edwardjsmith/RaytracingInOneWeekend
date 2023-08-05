@@ -94,6 +94,11 @@ inline static Vector3 RandomInHemisphere(const Vector3& normal)
     }
 }
 
+inline static Vector3 ReflectedVector(const Vector3& firstVector, const Vector3& secondVector)
+{
+    return firstVector - (2 * Dot(firstVector, secondVector) * secondVector);
+}
+
 // Common Headers
 
 #include "Ray.h"

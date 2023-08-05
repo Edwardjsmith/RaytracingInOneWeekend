@@ -6,6 +6,8 @@
 #include "HittablesList.h"
 #include "Sphere.h"
 #include "Colour.h"
+#include "Lambertian.h"
+#include "Metal.h"
 
 Colour RayColour(const Ray& ray, const HittableEntity& entity, const int depth)
 {
@@ -19,12 +21,18 @@ Colour RayColour(const Ray& ray, const HittableEntity& entity, const int depth)
 
 	if (entity.IsHit(ray, 0.001, infinity, data))
 	{
-		const Point3 target = data.hitPoint + RandomInHemisphere(data.hitNormal);
+		Ray scattered;
+		Colour attenuation;
 
-		return 0.5 * RayColour(Ray(data.hitPoint, target - data.hitPoint), entity, depth - 1);
+		if (data.hitMaterialPtr != nullptr && data.hitMaterialPtr->Scatter(ray, data, attenuation, scattered))
+		{
+			return attenuation * RayColour(scattered, entity, depth - 1);
+		}
+
+		return Colour(0);
 	}
 
-	Vector3 unitDir = GetUnitVector(ray.GetDirection());
+	const Vector3 unitDir = GetUnitVector(ray.GetDirection());
 
 	const double t = 0.5 * (unitDir.Y() + 1.0);
 
@@ -47,8 +55,15 @@ const int maxDepth = 50;
 
 int main()
 {
-	entities.Add(make_shared<Sphere>(Point3(0, -100.5, -1), 100));
-	entities.Add(make_shared<Sphere>(Point3(0, 0, -1), 0.5));
+	shared_ptr<Lambertian> floorMaterial = make_shared<Lambertian>(Colour(0.8, 0.8, 0.0));
+	shared_ptr<Lambertian> centreMaterial = make_shared<Lambertian>(Colour(0.7, 0.3, 0.3));
+	shared_ptr<Metal> leftMaterial = make_shared<Metal>(Colour(0.8, 0.8, 0.8), 0.3);
+	shared_ptr<Metal> rightMaterial = make_shared<Metal>(Colour(0.8, 0.6, 0.2), 1.0);
+
+	entities.Add(make_shared<Sphere>(Point3(0.0, -100.5, -1.0), 100.0, floorMaterial));
+	entities.Add(make_shared<Sphere>(Point3(-1.0, 0.0, -1.0), 0.5, leftMaterial));
+	entities.Add(make_shared<Sphere>(Point3(1.0, 0.0, -1.0), 0.5, rightMaterial));
+	entities.Add(make_shared<Sphere>(Point3(0.0, 0.0, -1.0), 0.5, centreMaterial));
 
 	//Render image
 	std::cout << "P3\n" << imageWidth << ' ' << imageHeight << "\n255\n";

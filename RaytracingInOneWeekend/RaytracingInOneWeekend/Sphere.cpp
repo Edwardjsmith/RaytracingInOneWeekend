@@ -32,5 +32,6 @@ bool Sphere::IsHit(const Ray& ray, double tMin, double tMax, HitData& hitData) c
 	hitData.hitScalar = root;
 	hitData.hitPoint = ray.CastRay(root);
 	hitData.SetFaceNormal(ray, (hitData.hitPoint - sphereCentre) / sphereRadius);
+	hitData.hitMaterialPtr = materialPtr;
 	
 }

@@ -1,12 +1,15 @@
 #ifndef HITTABLEENTITY_H
 #define HITTABLEENTITY_H
 
-#include "Ray.h"
+#include "Constants.h"
+
+class Material;
 
 struct HitData
 {
 	Point3 hitPoint;
 	Vector3 hitNormal;
+	shared_ptr<Material> hitMaterialPtr;
 	double hitScalar;
 	bool frontFacingNormal = false;
 
