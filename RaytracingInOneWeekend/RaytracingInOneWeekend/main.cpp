@@ -46,7 +46,7 @@ const int imageHeight = static_cast<int>(imageWidth / imageAspectRatio);
 const int samplesPerPixel = 100;
 
 //Camera
-Camera cam;
+Camera cam(Point3(-2, 2, 1), Point3(0, 0, -1), Vector3(0, 1, 0), 90.0, imageAspectRatio);
 
 //Hittable entities
 HittablesList entities;
@@ -62,9 +62,9 @@ int main()
 	shared_ptr<Metal> rightMaterial = make_shared<Metal>(Colour(0.8, 0.6, 0.2), 1.0);
 
 	entities.Add(make_shared<Sphere>(Point3(0.0, -100.5, -1.0), 100.0, floorMaterial));
-	entities.Add(make_shared<Sphere>(Point3(-1.0, 0.0, -1.0), -0.5, leftMaterial));
 	entities.Add(make_shared<Sphere>(Point3(1.0, 0.0, -1.0), 0.5, rightMaterial));
 	entities.Add(make_shared<Sphere>(Point3(0.0, 0.0, -1.0), 0.5, centreMaterial));
+	entities.Add(make_shared<Sphere>(Point3(-1.0, 0.0, -1.0), -0.5, leftMaterial));
 
 	//Render image
 	std::cout << "P3\n" << imageWidth << ' ' << imageHeight << "\n255\n";
