@@ -99,6 +99,15 @@ inline static Vector3 ReflectedVector(const Vector3& firstVector, const Vector3&
     return firstVector - (2 * Dot(firstVector, secondVector) * secondVector);
 }
 
+inline static Vector3 RefractedVector(const Vector3& uv, const Vector3& n, double etaiOverEtat)
+{
+    const double cosTheta = fmin(Dot(-uv, n), 1.0);
+    const Vector3 perpendicular = etaiOverEtat * (uv + (cosTheta * n));
+    const Vector3 parallel = -sqrt(fabs(1.0 - perpendicular.LengthSquared())) * n;
+
+    return perpendicular + parallel;
+}
+
 // Common Headers
 
 #include "Ray.h"

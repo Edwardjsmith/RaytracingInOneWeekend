@@ -1,4 +1,10 @@
-﻿  Metal.cpp
+﻿  Camera.cpp
+  Dielectric.cpp
+  HittablesList.cpp
+  Lambertian.cpp
   main.cpp
+  Metal.cpp
+  Sphere.cpp
   Generating Code...
+C:\Users\edwar\Documents\GitHub\RaytracingInOneWeekend\RaytracingInOneWeekend\RaytracingInOneWeekend\Sphere.cpp(37): warning C4715: 'Sphere::IsHit': not all control paths return a value
   RaytracingInOneWeekend.vcxproj -> C:\Users\edwar\Documents\GitHub\RaytracingInOneWeekend\RaytracingInOneWeekend\x64\Debug\RaytracingInOneWeekend.exe

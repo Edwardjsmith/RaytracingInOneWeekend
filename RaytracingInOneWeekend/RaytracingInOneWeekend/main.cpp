@@ -8,6 +8,7 @@
 #include "Colour.h"
 #include "Lambertian.h"
 #include "Metal.h"
+#include "Dielectric.h"
 
 Colour RayColour(const Ray& ray, const HittableEntity& entity, const int depth)
 {
@@ -57,11 +58,11 @@ int main()
 {
 	shared_ptr<Lambertian> floorMaterial = make_shared<Lambertian>(Colour(0.8, 0.8, 0.0));
 	shared_ptr<Lambertian> centreMaterial = make_shared<Lambertian>(Colour(0.7, 0.3, 0.3));
-	shared_ptr<Metal> leftMaterial = make_shared<Metal>(Colour(0.8, 0.8, 0.8), 0.3);
+	shared_ptr<Dialectric> leftMaterial = make_shared<Dialectric>(0.1);
 	shared_ptr<Metal> rightMaterial = make_shared<Metal>(Colour(0.8, 0.6, 0.2), 1.0);
 
 	entities.Add(make_shared<Sphere>(Point3(0.0, -100.5, -1.0), 100.0, floorMaterial));
-	entities.Add(make_shared<Sphere>(Point3(-1.0, 0.0, -1.0), 0.5, leftMaterial));
+	entities.Add(make_shared<Sphere>(Point3(-1.0, 0.0, -1.0), -0.5, leftMaterial));
 	entities.Add(make_shared<Sphere>(Point3(1.0, 0.0, -1.0), 0.5, rightMaterial));
 	entities.Add(make_shared<Sphere>(Point3(0.0, 0.0, -1.0), 0.5, centreMaterial));
 
