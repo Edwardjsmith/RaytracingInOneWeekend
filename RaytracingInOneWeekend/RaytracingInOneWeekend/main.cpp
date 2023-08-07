@@ -46,7 +46,13 @@ const int imageHeight = static_cast<int>(imageWidth / imageAspectRatio);
 const int samplesPerPixel = 100;
 
 //Camera
-Camera cam(Point3(-2, 2, 1), Point3(0, 0, -1), Vector3(0, 1, 0), 90.0, imageAspectRatio);
+const Point3 lookFrom(-2, 2, 1);
+const Point3 lookAt(0, 0, -1);
+const Vector3 up(0, 1, 0);
+const double distToFocus = (lookFrom - lookAt).Length();
+const double aperture = 2.0;
+
+Camera cam(lookFrom, lookAt, up, 90.0, imageAspectRatio, aperture, distToFocus);
 
 //Hittable entities
 HittablesList entities;

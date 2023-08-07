@@ -94,6 +94,21 @@ inline static Vector3 RandomInHemisphere(const Vector3& normal)
     }
 }
 
+inline static Vector3 RandomVectorInUnitDisc()
+{
+    while (true)
+    {
+        const Vector3 disc = Vector3(RandomDoubleInRange(-1, 1), RandomDoubleInRange(-1, 1), 0.0);
+
+        if (disc.LengthSquared() >= 1.0)
+        {
+            continue;
+        }
+
+        return disc;
+    }
+}
+
 inline static Vector3 ReflectedVector(const Vector3& firstVector, const Vector3& secondVector)
 {
     return firstVector - (2 * Dot(firstVector, secondVector) * secondVector);
